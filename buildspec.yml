@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto21
+  build:
+    commands:
+      - mvn -B clean test package
+      - mkdir -p bundle
+      - cp target/app.jar bundle/app.jar
+      - echo "web: java -jar app.jar" > bundle/Procfile
+      - cd bundle && zip -r ../app-bundle.zip .
+artifacts:
+  files:
+    - app-bundle.zip
