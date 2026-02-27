@@ -4,13 +4,18 @@ phases:
   install:
     runtime-versions:
       java: corretto21
+    commands:
+      - echo "Installing dependencies (if any)"
+      - mvn -vv
   build:
     commands:
-      - mvn -B clean test package
-      - mkdir -p bundle
-      - cp target/app.jar bundle/app.jar
-      - echo "web: java -jar app.jar" > bundle/Procfile
-      - cd bundle && zip -r ../app-bundle.zip .
+      - echo "Building Spring Boot JAR"
+      - mvn clean package -DskipTests
+      - echo "Renaming jar to app.jar"
+      - cp target/*.jar app.jar
+      - ls -la
+
 artifacts:
   files:
-    - app-bundle.zip
+    - app.jar
+    - Procfile
